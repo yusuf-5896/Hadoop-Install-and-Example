@@ -9,9 +9,9 @@
 
 ## 1. Adım
 
-İlk önce bilgisayarlarda "hadoop" isimli yönetici olarak ve şifreleri aynı olmak üzere kullanıcı oluşturalım. Ve bu kullanıcı ile oturum açalım.
+İlk önce bilgisayarlarda **"hadoop"** isimli yönetici olarak ve şifreleri aynı olmak üzere kullanıcı oluşturalım. Ve bu kullanıcı ile oturum açalım.
 
-resim settigs user kısımı
+![](https://github.com/satilmisyusuf/Hadoop-Install-and-Example/blob/master/images/img_user.png)
 
 
 ## 2.adım
@@ -23,9 +23,9 @@ resim settigs user kısımı
 	sudo apt-get install openssh-server openssh-client
 
 ## 3.adım
-/ect/hosts dosyasını düzenlememiz gerekiyor. terminalde "sudo gedit /etc/hosts" yazdıktan sonra resimdeki gibi bilgisayarların ip numaralarını ve isimlerini yazıyoruz. Master ve slave bütün bilgisayarlarda aynı olamalıdır.
+**"/ect/hosts"** dosyasını düzenlememiz gerekiyor. Terminalde **"sudo gedit /etc/hosts"** yazdıktan sonra resimdeki gibi bilgisayarların ip numaralarını ve isimlerini yazıyoruz. Master ve slave bütün bilgisayarlarda aynı olamalıdır.
 
-![](https://github.com/satilmisyusuf/Hadoop-Install-and-Example/blob/master/images/img_:etc:hosts.png)
+![](https://github.com/satilmisyusuf/Hadoop-Install-and-Example/blob/master/images/img_etc_hosts.png)
 
 ben burada sanal1 isimli cihazı master olarak, sanal2 ve sanal3 isimli cihazları slave olarak kullanacağım.
 
@@ -34,6 +34,7 @@ ssh ayarları ile devam ediyoruz.
 	ssh-keygen -t rsa -P ""   # master ve slave bütün bilgisayarlarda bu komut çalıştırılacak.
 
 SSH keylerini master bilgisayara kopyalıyoruz.
+
 	cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys           #master yazacak
 	ssh-copy-id -i $HOME/.ssh/id_rsa.pub hadoop@sanal1                #master yazacak
 	ssh-copy-id -i $HOME/.ssh/id_rsa.pub hadoop@sanal2                #master yazacak
@@ -41,19 +42,20 @@ SSH keylerini master bilgisayara kopyalıyoruz.
 	.
 	.
 	.
+	
 Kaç tane bilgisayar kullanacaksanız onlarıda eklemelisiniz.
 
-İşlemler bittikten sonra tüm bilgisayarlara ssh ile şifre sormadan bağlanabilmemiz gerekmektedir. "ssh sanal2" yazarak test edebiliriz. Şifre sormadan bu bilgisayarlara bağlanabiliryorsak devam edebiliriz.
+İşlemler bittikten sonra tüm bilgisayarlara ssh ile şifre sormadan bağlanabilmemiz gerekmektedir. ***"ssh sanal2"*** yazarak test edebiliriz. Şifre sormadan bu bilgisayarlara bağlanabiliryorsak devam edebiliriz.
 
 
 ## 4.adım
 
-https://archive.apache.org/dist/hadoop/core/hadoop-2.7.2/hadoop-2.7.2.tar.gz adresindeki dosyayı indirelim. Ve "/home/hadoop" klasörüne taşıyalım.
+https://archive.apache.org/dist/hadoop/core/hadoop-2.7.2/hadoop-2.7.2.tar.gz adresindeki dosyayı indirelim. Ve arşivden çıkan klasörü **"/home/hadoop"** klasörüne taşıyalım.
 
 ![](https://github.com/satilmisyusuf/Hadoop-Install-and-Example/blob/master/images/img_ls_hadoop.png)
 
 
-Klasörü kopyaladıktan sonra terminalde "gedit ~/.bashrc" yazalım açılan .bashrc dosyasına aşağıdaki komutları ekleyelim.
+Klasörü kopyaladıktan sonra terminalde **"gedit ~/.bashrc"** yazalım açılan .bashrc dosyasına aşağıdaki komutları ekleyelim.
 
 	export HADOOP_PREFIX=/home/hadoop/hadoop-2.7.2
 	export PATH=$PATH:$HADOOP_PREFIX/bin
@@ -65,20 +67,20 @@ Klasörü kopyaladıktan sonra terminalde "gedit ~/.bashrc" yazalım açılan .b
 	export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_PREFIX/lib/native
 	export HADOOP_OPTS="-Djava.library.path=$HADOOP_PREFIX/lib"
 	
-.bashrc dosyasını düzenleyerek kaydettikten sonra terminalde "source .bashrc" yazıyoruz.
+**.bashrc** dosyasını düzenleyerek kaydettikten sonra terminalde **"source .bashrc"** yazıyoruz.
 
-Şimdi kontol edelim. Buraya kadar işlemleri doğru yaptıysanız "hadoop version" yazında aşağıdaki gibi çıktınız olacaktır.
+Şimdi kontol edelim. Buraya kadar işlemleri doğru yaptıysanız **"hadoop version"** yazında aşağıdaki gibi çıktınız olacaktır.
 
 ![](https://github.com/satilmisyusuf/Hadoop-Install-and-Example/blob/master/images/img_hadoop_version.png)
 
 Şimdi bazı config dosyalarının içeriğini düzenleyeceğiz. 
 
-/home/hadoop/hadoop-2.7.2/etc/hadoop/hadoop-env.sh #master  ve slave için aynı
-Dosya içerisinde bir satır düzenlenecek.
+/home/hadoop/hadoop-2.7.2/etc/hadoop/hadoop-env.sh ***#master  ve slave için aynı
+Dosya içerisinde bir satır düzenlenecek.***
 
 	export JAVA_HOME=/usr/lib/jvm/java-8-oracle/
 
-/home/hadoop/hadoop-2.7.2/etc/hadoop/core-site.xml #master  ve slave için aynı
+/home/hadoop/hadoop-2.7.2/etc/hadoop/core-site.xml ***#master  ve slave için aynı**
 
 	<configuration>
 	<property>
@@ -87,7 +89,7 @@ Dosya içerisinde bir satır düzenlenecek.
 	</property>
 	</configuration>
 
-/home/hadoop/hadoop-2.7.2/etc/hadoop/hdfs-site.xml #master için
+/home/hadoop/hadoop-2.7.2/etc/hadoop/hdfs-site.xml ***#master için***
 
 	<property>
 	<name>dfs.replication</name>
@@ -107,7 +109,7 @@ Dosya içerisinde bir satır düzenlenecek.
 	</property>
 	</configuration>
 	
-/home/hadoop/hadoop-2.7.2/etc/hadoop/hdfs-site.xml #slave için	
+/home/hadoop/hadoop-2.7.2/etc/hadoop/hdfs-site.xml ***#slave için***	
 	
 	<configuration>
 	<property>
@@ -125,8 +127,8 @@ Dosya içerisinde bir satır düzenlenecek.
 	</configuration>
 	
 	
-/home/hadoop/hadoop-2.7.2/etc/hadoop/mapred-site.xml #master  ve slave için aynı
-bu dosya varsayıla olarak yok.  mapred-site.xml.template  dosyasını kopyalayarak adını değiştiriyoruz.
+/home/hadoop/hadoop-2.7.2/etc/hadoop/mapred-site.xml ***#master  ve slave için aynı
+bu dosya varsayılan olarak yok. "mapred-site.xml.template"  dosyasını kopyalayarak adını değiştiriyoruz.***
 
 	<configuration>
 	<property>
@@ -135,7 +137,7 @@ bu dosya varsayıla olarak yok.  mapred-site.xml.template  dosyasını kopyalaya
 	</property>
 	</configuration>
 
-/home/hadoop/hadoop-2.7.2/etc/hadoop/yarn-site.xml #master  ve slave için aynı
+/home/hadoop/hadoop-2.7.2/etc/hadoop/yarn-site.xml ***#master  ve slave için aynı***
 
 	<configuration>
 	<property>
@@ -160,24 +162,25 @@ bu dosya varsayıla olarak yok.  mapred-site.xml.template  dosyasını kopyalaya
 	</property>
 	</configuration>
 	
-/home/hadoop/hadoop-2.7.2/etc/hadoop/slaves  #master için 
-Bu dosyaya slave olacak bilgisayarları ekliyoruz. Ben master bilgisayarı yazmadım isterseniz eklenebilir.
+/home/hadoop/hadoop-2.7.2/etc/hadoop/slaves  ***#master için 
+Bu dosyaya slave olacak bilgisayarları ekliyoruz.(Ben master bilgisayarı yazmadım isterseniz eklenebilir).***
 
 	sanal2
 	sanal3
 
-şimdi terminalde "/home/hadoop/hadoop-2.7.2" klasörüne geliyoruz.
+Şimdi terminalde **"/home/hadoop/hadoop-2.7.2"** klasörüne geliyoruz.
 
 
-Şimdi hadoop'u başlatalım. sırası ıle bu komutları yazıyoruz.
+Şimdi hadoop'u başlatalım.Ssırası ıle bu komutları yazıyoruz.
 
 	./sbin/start-dfs.sh
 	./sbin/start-yarn.sh
 	
-ilk olarak namenodu oluşturuyoruz. 
+İlk olarak namenodu oluşturuyoruz. 
 	
 	hdfs namenode -format
-bu işlemden sonra "/home/hadoop/hadoop-2.7.2" içinde namenode adlı bir klasör olması gerekmekte. bu işlem sonrası hadoop'u durdurup tekrar başlatalım.
+	
+Bu işlemden sonra **"/home/hadoop/hadoop-2.7.2"** içinde namenode adlı bir klasör olması gerekmekte. Bu işlem sonrası hadoop'u durdurup tekrar başlatalım.
 
 	./sbin/stop-yarn.sh
 	./sbin/stop-dfs.sh
@@ -188,24 +191,29 @@ bu işlemden sonra "/home/hadoop/hadoop-2.7.2" içinde namenode adlı bir klasö
 
 
 Eğer herşey doğru ise:
-* master bilgisayarda "jps" yadıktan sonra terminalde çıktı olarak bunarı görmemiz gerekmekte.
+	
+* Master bilgisayarda "jps" yadıktan sonra terminalde çıktı olarak bunları görmemiz gerekmekte.
 
 
 		ResourceManager
 		Jps
 		NameNode
 		NodeManager
+		
 	(eğer slaves dosyasına master bigisayarınıda ekledıysek bunlara ek olarak "DataNode" da görmemiz gerekli.)
 	
 	![](https://github.com/satilmisyusuf/Hadoop-Install-and-Example/blob/master/images/img_master_jps.png)
 	
-* master bilgisayarda "jps" yadıktan sonra terminalde çıktı olarak bunarı görmemiz gerekmekte.
+* Slave bilgisayarda "jps" yadıktan sonra terminalde çıktı olarak bunları görmemiz gerekmekte.
 	
 		NodeManager
 		DataNode
 		Jps
+		
 	![](https://github.com/satilmisyusuf/Hadoop-Install-and-Example/blob/master/images/img_slave_jps.png)
-birde webtarayıcımızda bakalım. 
+	
+	
+Birde webtarayıcımızda bakalım. 
 
 * "http://sanal1:8088" adresıne gidelim ve sol taraftan nodes kısmına tıklayalım. Resımdeki gibi slave nodelar listelenmelidir.
 
@@ -216,13 +224,13 @@ birde webtarayıcımızda bakalım.
 ![](https://github.com/satilmisyusuf/Hadoop-Install-and-Example/blob/master/images/img_sanal1_50070.png) 
 
 
-buraya kadar resimlerdeki gibi bir sonuç aldıysanız başarıyla kurulum gerçekleştirilmiştir.
+Buraya aşamada resimlerdeki gibi bir sonuç aldıysanız başarıyla kurulum gerçekleştirilmiştir.
 
-şimdi hadoop'un örnek olarak veriği wordcount uygulamasını deneyelim.
+Şimdi hadoop'un örnek olarak veriği wordcount uygulamasını deneyelim.
 önce verdiğim blogs klasörünü masaüstüne kopyalayalım.
-resım ls desktop
+![](https://github.com/satilmisyusuf/Hadoop-Install-and-Example/blob/master/images/img_desktop.png) 
 
-hadoop çalışırken bu komutları yazalım.
+Hadoop çalışırken bu komutları yazalım.
 	
 	bin/hdfs dfs -mkdir /user
 	bin/hdfs dfs -mkdir /user/hadoop
@@ -230,13 +238,13 @@ hadoop çalışırken bu komutları yazalım.
 	
 ![](https://github.com/satilmisyusuf/Hadoop-Install-and-Example/blob/master/images/img_datanode_input.png) 
 
-şimdi jar dosyamızı çalıştıralım.
+Şimdi jar dosyamızı çalıştıralım.
 
 	bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar wordcount input output
 	
 ![](https://github.com/satilmisyusuf/Hadoop-Install-and-Example/blob/master/images/img_application.png) 
 
-işlem bitince sonuçları görebiliriz.
+İşlem bitince sonuçları görebiliriz.
 
 	bin/hadoop dfs -cat output/*
 ![](https://github.com/satilmisyusuf/Hadoop-Install-and-Example/blob/master/images/img_output.png) 
